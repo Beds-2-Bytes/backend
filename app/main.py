@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.auth import verify_jwt_token
 from app.routers import simulation, users
 
+# Main App instance
 app = FastAPI()
 
 # CORS, Allow all requests, types and headers
@@ -15,9 +16,6 @@ app.add_middleware(
     allow_methods=['*'],
     allow_headers=['*']
 )
-
-# Main App instance
-app = FastAPI()
 
 # Include routes
 app.include_router(users.router)
