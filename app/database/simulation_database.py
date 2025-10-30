@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
-DATABASE_URL = f"postgresql://{os.getenv('DBUSER')}:{os.getenv('DBPW')}@postgresql/{os.getenv('DBNAME')}"
+DATABASE_URL = f"postgresql://{os.getenv('DBUSER')}:{os.getenv('DBPW')}@localhost:5432/{os.getenv('DBNAME')}"
 
 # Database Connection
 engine = create_engine(DATABASE_URL)
@@ -20,7 +20,7 @@ class SimulationItem(Base):
     user_id = Column(Integer, nullable=False)  # Associate created simulation with a user
     case_id = Column(Integer, nullable=False)
     patient_notes = Column(Text, nullable=True)
-    passphrase = Column(String, nullabe=False, default="beds2bytes")
+    passphrase = Column(String, nullable=False, default="beds2bytes")
     state = Column(Boolean, nullable=False, default=True)
 
 

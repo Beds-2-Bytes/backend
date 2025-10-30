@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException, Depends, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from app.database.simulation_database import SessionLocal, SimulationItem
-from app.auth import verify_jwt_token  # Import the verify_jwt_token function
+from database.simulation_database import SessionLocal, SimulationItem
+from auth import verify_jwt_token  # Import the verify_jwt_token function
 
 router = APIRouter(
     prefix="/simulations",

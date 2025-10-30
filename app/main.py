@@ -2,8 +2,8 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 #from app.database import SessionLocal, CartItem
-from app.auth import verify_jwt_token
-from app.routers import simulation, users
+from auth import verify_jwt_token
+from routers import simulation, users
 
 # Main App instance
 app = FastAPI()
@@ -18,8 +18,8 @@ app.add_middleware(
 )
 
 # Include routes
-app.include_router(users.router)
-app.include_router(simulation.router)
+app.include_router(users.router) # /users
+app.include_router(simulation.router) # /simulations
 
 # Root endpoint
 @app.get("/")

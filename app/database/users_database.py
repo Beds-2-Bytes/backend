@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
-DATABASE_URL = f"postgresql://{os.getenv('DBUSER')}:{os.getenv('DBPW')}@postgresql/{os.getenv('DBNAME')}"
+DATABASE_URL = f"postgresql://{os.getenv('DBUSER')}:{os.getenv('DBPW')}@localhost:5432/{os.getenv('DBNAME')}"
 
 # Database Connection
 engine = create_engine(DATABASE_URL)
@@ -17,11 +17,10 @@ class UserItem(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, nullable=False)
     username = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False) # Hashed password
-    role = Column(Integer, default=0, nullable=False) # I.E admin, student...
+    role = Column(String, default=0, nullable=False) # I.E admin, student...
 
 # Create Tables if they don’t exist
 Base.metadata.create_all(bind=engine)

@@ -23,3 +23,6 @@ requests
 
 # JWT token support
 python-jose
+
+# Password hashing
+passlib[bcrypt]
