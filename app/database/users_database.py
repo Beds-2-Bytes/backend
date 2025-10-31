@@ -1,8 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Enum
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 import os
 from dotenv import load_dotenv
+from constants import RoleEnum
 
 load_dotenv()  # Load environment variables from .env file
 DATABASE_URL = f"postgresql://{os.getenv('DBUSER')}:{os.getenv('DBPW')}@localhost:5432/{os.getenv('DBNAME')}"
@@ -20,7 +21,7 @@ class UserItem(Base):
     username = Column(String, nullable=False)
     email = Column(String, nullable=False)
     password = Column(String, nullable=False) # Hashed password
-    role = Column(String, default=0, nullable=False) # I.E admin, student...
+    role = Column(Enum(RoleEnum), default=RoleEnum.student, nullable=False) # I.E admin, student...
 
 # Create Tables if they don’t exist
 Base.metadata.create_all(bind=engine)

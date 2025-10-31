@@ -1,8 +1,8 @@
-from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends, Header
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 #from app.database import SessionLocal, CartItem
-from auth import verify_jwt_token
+from security.verify import verify_jwt_token
 from routers import simulation, users
 
 # Main App instance
@@ -17,8 +17,14 @@ app.add_middleware(
     allow_headers=['*']
 )
 
+@app.get("/debug")
+async def debug_header(authorization: str | None = Header(...)):
+    print(f"Authorization header received: {authorization!r}")
+    return {"authorization": authorization}
+
 # Include routes
-app.include_router(users.router) # /users
+app.include_router(users.public_router) # /users public
+app.include_router(users.protected_router) # /users protected
 app.include_router(simulation.router) # /simulations
 
 # Root endpoint
