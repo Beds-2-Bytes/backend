@@ -85,10 +85,10 @@ async def get_user_simulations(
 ):
     """Get all of the users made simulations"""
     user_id = int(payload.get('sub'))
-    user_sims = db.query(SimulationItem).filter(SimulationItem.user_id == user_id, SimulationItem.state == True).all()
+    user_sims = db.query(SimulationItem).filter(SimulationItem.user_id == user_id).all()
 
     if not user_sims:
-        raise HTTPException(status_code=404, detail="No active simulations found for user")
+        raise HTTPException(status_code=404, detail="No simulations found for user")
     
     return [
         {
@@ -137,3 +137,22 @@ async def update_sim(
             "state": sim.state
         }
     }
+
+# Delete sim
+@router.delete("/{sim_id}", status_code=status.HTTP_200_OK)
+async def delete_sim(
+    sim_id: int,
+    db: Session = Depends(get_db),
+    #payload: dict = Depends(get_db)
+):
+    """Delete a simulation"""
+    #user_id = int(payload.get('sub'))
+    sim = db.query(SimulationItem).filter(SimulationItem.id == sim_id).first()
+
+    if not sim:
+        raise HTTPException(status_code=404, detail="Simulation not found")
+    
+    db.delete(sim)
+    db.commit()
+
+    return {"message": f"Simulation {sim.name} removed"}
