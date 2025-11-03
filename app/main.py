@@ -4,6 +4,12 @@ from sqlalchemy.orm import Session
 #from app.database import SessionLocal, CartItem
 from security.verify import verify_jwt_token
 from routers import simulation, users
+from database.database import Base, engine
+from database.users_database import UserItem
+from database.simulation_database import SimulationItem
+
+# Create DB tables and such for sqlalchemy
+Base.metadata.create_all(bind=engine)
 
 # Main App instance
 app = FastAPI()
@@ -17,15 +23,11 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-@app.get("/debug")
-async def debug_header(authorization: str | None = Header(...)):
-    print(f"Authorization header received: {authorization!r}")
-    return {"authorization": authorization}
-
 # Include routes
 app.include_router(users.public_router) # /users public
 app.include_router(users.protected_router) # /users protected
 app.include_router(simulation.router) # /simulations
+
 
 # Root endpoint
 @app.get("/")
