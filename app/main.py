@@ -7,6 +7,7 @@ from routers import simulation, users
 from database.database import Base, engine
 from database.users_database import UserItem
 from database.simulation_database import SimulationItem
+from websocket.websocket import router as websocket_router
 
 # Create DB tables and such for sqlalchemy
 Base.metadata.create_all(bind=engine)
@@ -28,6 +29,8 @@ app.include_router(users.public_router) # /users public
 app.include_router(users.protected_router) # /users protected
 app.include_router(simulation.router) # /simulations
 
+# Websocket route
+app.include_router(websocket_router)
 
 # Root endpoint
 @app.get("/")
