@@ -95,10 +95,11 @@ class UserLogin(BaseModel):
 
 # Login user
 @public_router.post("/login")
-async def login(email: str, password: str, db: Session = Depends(get_db)):
+async def login(new_user: UserLogin, db: Session = Depends(get_db)):
     """Login user, returns a jwttoken"""
-    user = db.query(UserItem).filter(UserItem.email == email).first()
-    if not user or not verify_password(password, user.password):
+
+    user = db.query(UserItem).filter(UserItem.email == new_user.email).first()
+    if not user or not verify_password(new_user.password, user.password):
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
     access_token = create_access_token(

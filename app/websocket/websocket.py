@@ -85,6 +85,7 @@ class RoomManager:
                 continue
 
             try:
+                print("DATA: \n", data)
                 await ws.send_json(data)
             except Exception as e:
                 # If sending fails, you might optionally clean up here.
