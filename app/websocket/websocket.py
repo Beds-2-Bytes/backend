@@ -60,7 +60,7 @@ class RoomManager:
         room = self.rooms.get(room_id)
         if not room:
             return
-        
+
         broadcast_data = {
             "type": message.get("type", "update"),
             "from": user_id,
@@ -97,6 +97,43 @@ manager = RoomManager()
 @router.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
+    token: str = Query(None),
+    room: str = Query(None),
+):
+    print("🚀 Incoming WS handshake",
+          "has_token=", bool(token),
+          "room=", room)
+
+    if not token or not room:
+        print("⛔ Missing token or room in WS")
+        await websocket.close(code=1008)  # Policy violation
+        return
+
+    try:
+        payload = verify_jwt_token_ws(token)  # must take raw string token
+        user_id = payload["sub"]
+        print(f"✅ WS auth OK for user={user_id}, room={room}")
+    except HTTPException as e:
+        print(f"⛔ WS auth failed: {e.status_code} {e.detail}")
+        await websocket.close(code=1008)
+        return
+    except Exception as e:
+        print(f"⛔ WS unexpected error: {e}")
+        await websocket.close(code=1011)
+        return
+
+    await manager.connect(websocket, room, user_id)
+
+    try:
+        while True:
+            data = await websocket.receive_json()
+            await manager.handle_message(room, user_id, data)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, room, user_id)
+
+'''@router.websocket("/ws")
+async def websocket_endpoint(
+    websocket: WebSocket,
     token: str = Query(...),
     room: str = Query(...),
 ):
@@ -121,4 +158,4 @@ async def websocket_endpoint(
             await manager.handle_message(room, user_id, data)
 
     except WebSocketDisconnect:
-        manager.disconnect(websocket, room, user_id)
+        manager.disconnect(websocket, room, user_id)'''
