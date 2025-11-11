@@ -10,7 +10,7 @@ Hosted on CSC!
 
 Python 3.11 used in this project.
 
-You need to have a postgresql server instance in use, for development here a local docker instance och pgsql was used.
+You need to have a postgresql server instance in use, for development a local docker instance och pgsql was used.
 
 1. Clone repository
 
@@ -44,6 +44,8 @@ DBPW='db_password'
 
 DBUSER='db_user'
 
+DBURL='your_db_url, if local then localhost:5432'
+
 SECRETKEY='your_jwt_secret'
 ```
 
@@ -53,4 +55,4 @@ SECRETKEY='your_jwt_secret'
 fastapi dev main.py
 ```
 
-The docker files are meaningless for local development so they can be deleted if one wishes to.
+The docker files are meaningless for local development so they can be deleted if one wishes to or used with a dockerized development environment.

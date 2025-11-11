@@ -89,6 +89,10 @@ async def register_user(user: UserCreate, db: Session = Depends(get_db)):
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
+class UserLogin(BaseModel):
+    email: str
+    password: str
+
 # Login user
 @public_router.post("/login")
 async def login(email: str, password: str, db: Session = Depends(get_db)):
