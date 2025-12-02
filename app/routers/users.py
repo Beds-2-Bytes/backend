@@ -127,7 +127,7 @@ async def get_user_data(db: Session = Depends(get_db), payload: dict = Depends(v
     user = db.query(UserItem).filter(UserItem.id == user_id).first()
 
     if not user:
-        raise HTTPException(status=404, detail="User not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     
     return {
         "id": user.id,

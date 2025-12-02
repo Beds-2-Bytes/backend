@@ -14,3 +14,5 @@ class UserItem(Base):
     role = Column(Enum(RoleEnum), default=RoleEnum.student, nullable=False) # I.E admin, student...
 
     simulations = relationship("SimulationItem", back_populates="user", cascade="all, delete")
+    files = relationship("FileItem", back_populates="user", cascade="all, delete")
+    cases = relationship("CaseItem", back_populates="user", cascade="all, delete")

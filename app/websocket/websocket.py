@@ -101,7 +101,7 @@ async def websocket_endpoint(
     token: str = Query(None),
     room: str = Query(None),
 ):
-    print("🚀 Incoming WS handshake",
+    print("Incoming WS handshake",
           "has_token=", bool(token),
           "room=", room)
 

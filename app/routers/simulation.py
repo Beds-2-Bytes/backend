@@ -73,6 +73,7 @@ async def get_all_active_sims(
             "name": sim.name,
             "patient_notes": sim.patient_notes,
             "state": sim.state,
+            "case": sim.case
         }
         for sim in active_sims
     ]
@@ -120,6 +121,7 @@ async def update_sim(
     if not sim:
         raise HTTPException(status_code=404, detail="Simulation not found")
     
+    # Update only the fields sent, not all again
     for key, value in updates.model_dump(exclude_unset=True).items():
         setattr(sim, key, value)
     

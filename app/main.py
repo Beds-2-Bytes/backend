@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 #from app.database import SessionLocal, CartItem
 from security.verify import verify_jwt_token
-from routers import simulation, users
+from routers import simulation, users, cases, files
 from database.database import Base, engine
 from database.users_database import UserItem
 from database.simulation_database import SimulationItem
+from database.cases_database import CaseItem
+from database.files_database import FileItem
 from websocket.websocket import router as websocket_router
 
 # Create DB tables and such for sqlalchemy
@@ -24,10 +26,12 @@ app.add_middleware(
     allow_headers=['*']
 )
 
-# Include routes
+# Include API routes/endpoints
 app.include_router(users.public_router) # /users public
 app.include_router(users.protected_router) # /users protected
 app.include_router(simulation.router) # /simulations
+app.include_router(cases.router) # /cases
+app.include_router(files.router) # /files
 
 # Websocket route
 app.include_router(websocket_router)
