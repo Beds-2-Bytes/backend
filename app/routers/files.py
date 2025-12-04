@@ -46,7 +46,7 @@ async def upload_image(
     room_dir.mkdir(parents=True, exist_ok=True)
 
     ext = Path(file.filename).suffix
-    filename = f"{uuid4()}{ext}"
+    filename = f"{uuid4()}{ext}" # We create a uuid so that our file names are unique and no issues arise from it
     file_path = room_dir / filename
 
     with file_path.open('wb') as buffer:
@@ -87,7 +87,7 @@ async def delete_images(
     room_dir = UPLOAD_DIR / room_id
 
     if not room_dir.exists() or not room_dir.is_dir():
-        return { "room_id": room_id, "deleted": False, "reason": "Room has no images"}
+        return { "room_id": room_id, "deleted": False, "reason": "Room has no images or room doesn't exist"}
     
     for file_path in room_dir.iterdir():
         if file_path.is_file():

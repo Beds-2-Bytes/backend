@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
 
+# Add the uploads folder and give the user within the docker environment permission to access, modify and add things
 RUN mkdir -p /code/app/uploads && chmod -R 777 /code/app/uploads
 
 RUN echo "I am Running"
