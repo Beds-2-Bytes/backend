@@ -8,6 +8,8 @@ RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 COPY ./app /code/app
 
+RUN mkdir -p /code/app/uploads && chmod -R 777 /code/app/uploads
+
 RUN echo "I am Running"
 
 # This can be overridden in .env if declared in docker-compose
