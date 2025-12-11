@@ -54,6 +54,20 @@ async def create_simulation(
 
     return new_sim
 
+# Get individual Case
+@router.get("/{sim_id}", status_code=status.HTTP_200_OK)
+async def get_single_sim(
+    sim_id: int,
+    db: Session = Depends(get_db)
+):
+    """Get single simulation for id"""
+    simulation = db.query(SimulationItem).filter(SimulationItem.id == sim_id).first()
+
+    if not simulation:
+        raise HTTPException(status_code=404, detail="Simulation not found")
+
+    return simulation
+
 # Get all active simulations
 @router.get("/", status_code=status.HTTP_200_OK)
 async def get_all_active_sims(

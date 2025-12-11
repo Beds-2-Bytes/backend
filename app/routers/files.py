@@ -37,7 +37,7 @@ async def upload_image(
     file: UploadFile = File(...),
 ):
     """
-    Endpoint to upload image
+    Endpoint to upload an image for a specific room.
     """
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="Only images are allowed")

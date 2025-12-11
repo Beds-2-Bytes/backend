@@ -49,6 +49,19 @@ async def get_cases(
         for case in cases
     ]
 
+@router.get("/{case_id}", status_code=status.HTTP_200_OK)
+async def get_single_case(
+    case_id: int,
+    db: Session = Depends(get_db)
+):
+    """Get single case for id"""
+    case = db.query(CaseItem).filter(CaseItem.id == case_id).first()
+
+    if not case:
+        raise HTTPException(status_code=404, detail="Case found")
+    
+    return case
+
 # Case model for POST method
 class CaseCreate(BaseModel):
     case_name: str
