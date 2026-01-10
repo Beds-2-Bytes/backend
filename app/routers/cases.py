@@ -6,7 +6,7 @@ from database.cases_database import CaseItem
 from security.verify import verify_jwt_token  # Import the verify_jwt_token function
 from security.create_token import create_access_token
 from pydantic import BaseModel, EmailStr, Field
-from typing import Optional
+from typing import Optional, Dict, Any
 
 
 router = APIRouter(
@@ -49,6 +49,7 @@ async def get_cases(
         for case in cases
     ]
 
+# GET single case
 @router.get("/{case_id}", status_code=status.HTTP_200_OK)
 async def get_single_case(
     case_id: int,
@@ -59,13 +60,14 @@ async def get_single_case(
 
     if not case:
         raise HTTPException(status_code=404, detail="Case found")
-    
+     
     return case
 
 # Case model for POST method
 class CaseCreate(BaseModel):
     case_name: str
     patient_name: str
+    base_values: Dict[str, Any] = Field(default_factory=dict)
     patient_id: str
     base_problem: str
     learning_goals: str
@@ -101,6 +103,15 @@ async def create_case(
         'body': new_case
     }
 
+# Merging the document column with the new incoming changes if there are any
+def deep_merge(dst: dict, src: dict) -> dict:
+    for k, v in src.items():
+        if isinstance(v, dict) and isinstance(dst.get(k), dict):
+            deep_merge(dst[k], v)
+        else:
+            dst[k] = v
+    return dst
+
 class CaseUpdate(BaseModel):
     case_name: Optional[str] = None
     patient_name: Optional[str] = None
@@ -108,6 +119,7 @@ class CaseUpdate(BaseModel):
     base_problem: Optional[str] = None
     learning_goals: Optional[str] = None
     start_point: Optional[str] = None
+    base_values: Optional[Dict[str, Any]] = None
 
 # Edit cases
 @router.patch("/{case_id}", status_code=status.HTTP_200_OK)
@@ -126,9 +138,22 @@ async def update_case(
     if not case:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found")
 
-    # Update only the fields sent, not all
-    for key, value in updates.model_dump(exclude_unset=True).items():
+    payload = updates.model_dump(exclude_unset=True, exclude=None)
+
+    if "base_values" in payload:
+        incoming = payload.pop("base_values") or {}
+
+        if case.base_values is None:
+            case.base_values = {}
+
+        case.base_values = deep_merge(case.base_values, incoming)
+
+    for key, value in payload.items():
         setattr(case, key, value)
+
+    # Update only the fields sent, not all
+    #for key, value in updates.model_dump(exclude_unset=True).items():
+    #    setattr(case, key, value)
 
     db.commit()
     db.refresh(case)
