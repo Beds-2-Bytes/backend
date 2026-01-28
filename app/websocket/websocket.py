@@ -7,12 +7,7 @@ router = APIRouter()
 
 class RoomManager:
     """
-    Room-based WebSocket manager.
-
-    - Each room_id maps to a dict of { user_id: WebSocket }
-    - No global state; we just relay JSON messages.
-    - Incoming message is treated as a generic JSON object.
-      We wrap it with metadata and broadcast to others in the same room.
+    Manages all rooms and connections.
     """
     def __init__(self):
         # rooms[room_id] = { user_id: WebSocket, ... }
@@ -47,15 +42,11 @@ class RoomManager:
         Handle an incoming JSON object from a user in a room
         and broadcast it to all other users in that same room.
 
-        Expected client payload format is flexible, e.g.:
-
+        Expected client payload:
             {
               "type": "update",
               "payload": { "id": "pulse", "value": 97 }
             }
-
-        But we don't enforce it; whatever they send becomes `payload`
-        if not already wrapped.
         """
         room = self.rooms.get(room_id)
         if not room:
@@ -88,7 +79,6 @@ class RoomManager:
                 print("DATA: \n", data)
                 await ws.send_json(data)
             except Exception as e:
-                # If sending fails, you might optionally clean up here.
                 print(f"Failed to send to {uid} in room {room_id}: {e}")
 
 
@@ -106,20 +96,20 @@ async def websocket_endpoint(
           "room=", room)
 
     if not token or not room:
-        print("⛔ Missing token or room in WS")
+        print("Missing token or room in WS")
         await websocket.close(code=1008)  # Policy violation
         return
 
     try:
         payload = verify_jwt_token_ws(token)  # must take raw string token
         user_id = payload["sub"]
-        print(f"✅ WS auth OK for user={user_id}, room={room}")
+        print(f"WS auth OK for user={user_id}, room={room}")
     except HTTPException as e:
-        print(f"⛔ WS auth failed: {e.status_code} {e.detail}")
+        print(f"WS auth failed: {e.status_code} {e.detail}")
         await websocket.close(code=1008)
         return
     except Exception as e:
-        print(f"⛔ WS unexpected error: {e}")
+        print(f"WS unexpected error: {e}")
         await websocket.close(code=1011)
         return
 
@@ -131,32 +121,3 @@ async def websocket_endpoint(
             await manager.handle_message(room, user_id, data)
     except WebSocketDisconnect:
         manager.disconnect(websocket, room, user_id)
-
-'''@router.websocket("/ws")
-async def websocket_endpoint(
-    websocket: WebSocket,
-    token: str = Query(...),
-    room: str = Query(...),
-):
-    """
-    Connect with:
-        ws://<host>/ws?token=<JWT>&room=<room_id>
-
-    - JWT is verified using verify_jwt_token_ws(token).
-    - `sub` in the JWT is used as user_id.
-    - Any JSON sent by a client gets broadcast to *other* clients in the same room.
-    """
-    # Validate JWT and extract user id
-    payload = verify_jwt_token_ws(token)
-    user_id = payload["sub"]
-
-    # Register connection
-    await manager.connect(websocket, room, user_id)
-
-    try:
-        while True:
-            data = await websocket.receive_json()
-            await manager.handle_message(room, user_id, data)
-
-    except WebSocketDisconnect:
-        manager.disconnect(websocket, room, user_id)'''
