@@ -15,7 +15,6 @@ if not SECRET_KEY:
     raise ValueError("SECRET_KEY not found in environment variables")
 
 def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Used automatically by HTTP endpoints via Depends()."""
     token = credentials.credentials
     return _decode_jwt(token)
 

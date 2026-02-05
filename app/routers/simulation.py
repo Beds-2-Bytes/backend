@@ -87,7 +87,7 @@ async def get_user_simulations(
         for sim in user_sims
     ]
 
-# Get individual Case
+# Get individual Simulation
 @router.get("/{sim_id}", status_code=status.HTTP_200_OK)
 async def get_single_sim(
     sim_id: int,

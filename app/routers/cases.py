@@ -72,6 +72,10 @@ class CaseCreate(BaseModel):
     base_problem: str
     learning_goals: str
     start_point: str
+    ai_summary: str
+    medication_list: str
+    lab_samples: str
+
 
 # Create Case
 @router.post("/", status_code=status.HTTP_201_CREATED)
@@ -120,6 +124,9 @@ class CaseUpdate(BaseModel):
     learning_goals: Optional[str] = None
     start_point: Optional[str] = None
     base_values: Optional[Dict[str, Any]] = None
+    ai_summary: Optional[str] = None
+    medication_list: Optional[str] = None
+    lab_samples: Optional[str] = None
 
 # Edit cases
 @router.patch("/{case_id}", status_code=status.HTTP_200_OK)

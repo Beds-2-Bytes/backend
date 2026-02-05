@@ -14,7 +14,7 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 120
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    """Generate a JWT access token with UTC timezone awareness."""
+    """Generate a JWT access token."""
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)

@@ -15,9 +15,15 @@ class CaseItem(Base):
     patient_name = Column(String, nullable=False)
     patient_id = Column(String, nullable=False)
     base_values = Column(MutableDict.as_mutable(JSONB), nullable=False, default=dict)
+    # Medical Diagnosis
     base_problem = Column(Text, nullable=False)
     learning_goals = Column(Text, nullable=False)
+    # Current Status / Anamnesis
     start_point = Column(Text, nullable=False)
+    # Added newly
+    ai_summary = Column(Text, nullable=False)
+    medication_list = Column(Text, nullable=False)
+    lab_samples = Column(Text, nullable=False)
 
     simulations = relationship("SimulationItem", back_populates="case")
     user = relationship('UserItem', back_populates="cases")
