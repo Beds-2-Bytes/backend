@@ -2,9 +2,43 @@
 
 Running with FastApi for the REST API
 
-POSTGRESQL as Database
+## Requirements
 
-Hosted on CSC!
+### Language
+
+Python 3.11
+
+### Packages
+
+FastAPI
+
+FastAPI-cors
+
+pydantic
+
+uvicorn
+
+SQLAlchemy
+
+psycopg2-binary
+
+python-dotenv
+
+requests
+
+python-jose
+
+passlib[argon2]
+
+### Database
+
+PostgreSQL
+
+### Other Software
+
+Docker
+
+The docker compose file maps the 8080 port for usage, but you don't have to do anything else for now. 
 
 ## Use locally
 
@@ -54,5 +88,3 @@ SECRETKEY='your_jwt_secret'
 ```Python
 fastapi dev main.py
 ```
-
-The docker files are meaningless for local development so they can be deleted if one wishes to or used with a dockerized development environment.
