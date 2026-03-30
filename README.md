@@ -1,73 +1,96 @@
-# backend
+# Beds2Bytes Backend Service
 
-Running with FastApi for the REST API
+Backend service for the *Beds2Bytes* virtual care web application. 
+
+## Overview
+
+This service provides the core backend functionality for the application, including:
+
+- REST API (CRUD Operations)
+- Websocket Server
+- Authentication
+- Image/File handler
+
+## Architecture
+
+The backend consists of:
+
+- REST API for handling client requests and database operations
+- WebSocket server for real-time communication
+- Authentication layer using JWT for secure access
+- Database layer for persistent storage
+
+## Tech Stack
+
+- Language: Python 3.11
+- Framework: FastAPI
+- Database: PostgreSQL
+- ORM: SQLAlchemy
 
 ## Requirements
 
-### Language
+See `requirements.txt` for the full list of dependencies.
 
-Python 3.11
+### Key Packages
 
-### Packages
-
-FastAPI
-
-FastAPI-cors
-
-pydantic
-
-uvicorn
-
-SQLAlchemy
-
-psycopg2-binary
-
-python-dotenv
-
-requests
-
-python-jose
-
-passlib[argon2]
-
-### Database
-
-PostgreSQL
+- fastapi
+- fastapi-cors
+- pydantic
+- uvicorn
+- sqlalchemy
+- psycopg2-binary
+- python-dotenv
+- requests
+- python-jose
+- passlib[argon2]
 
 ### Other Software
 
-Docker
+Docker (Optional)
 
 The docker compose file maps the 8080 port for usage, but you don't have to do anything else for now. 
 
-## Use locally
+## Getting Started
 
-Python 3.11 used in this project.
+### Prerequisites
 
-You need to have a postgresql server instance in use, for development a local docker instance och pgsql was used.
+- Python 3.11
+- PostgreSQL instance (local or remote)
+- (Optional) Docker
+ 
+1. Clone the repository
 
-1. Clone repository
-
-```Python
+```bash
 git clone [gitlink]
 cd backend
 ```
 
-2. Create python virtual environment
+2. Create a virtual environment
 
-```Python
+```bash
 python -m venv 'your_venv_name'
 ```
 
 And activate the environment
 
-3. Install the dependencies:
+Linux/macOS
+```bash
+source venv/bin/activate
+```
+Windows
+```bash
+venv\Scripts\activate
+```
 
-```Python
+3. Install the Dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-4. Configure .env file
+4. Configure Environment Variables
+
+Create a .env file in the root directory (recommended to just copy the .env_example file and rename it .env).
 
 ```bash
 MODE=development
@@ -87,4 +110,45 @@ SECRETKEY='your_jwt_secret'
 
 ```Python
 fastapi dev main.py
+```
+
+The API will be available at:
+
+http://localhost:8000 
+
+6. Run with Docker (Optional)
+
+The repository includes all the relevant docker files to work with docker. Just run:
+
+```bash
+docker compose up
+```
+The API will be available at:
+
+http://localhost:8080 
+
+(The ports can be configured to your prefered port)
+
+## API Documentation 
+
+Once the service is running, interactive API docs are available at:
+
+Swagger UI: `http://localhost:8080/docs`
+
+## Project Structure
+
+```
+backend/
+├── requirements.txt         # Dependencies
+├── Dockerfile               # Docker container setup
+├── docker-compose.yml       # Docker configuration
+├── .env                     # Environment variables (not committed)
+└── app/
+    ├── main.py              # Entry point of the application
+    ├── config.py            # Configurations
+    ├── constants.py         # Global constants
+    ├── routers/             # API route definitions
+    ├── security/            # JWT Authentication
+    ├── database/            # Database setup and connection and models/schemas
+    └── websocket/           # Websocket server configuration/endpoint
 ```
