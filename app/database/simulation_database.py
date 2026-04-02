@@ -9,11 +9,11 @@ class SimulationItem(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)  # Associate created simulation with a user
     case_id = Column(Integer, ForeignKey("cases.id"), nullable=False)
-    name = Column(String, nullable=False)
+    name = Column(String(255), nullable=False)
     nurse_notes = Column(Text, nullable=True)
     ergo_notes = Column(Text, nullable=True)
     phys_notes = Column(Text, nullable=True)
-    passphrase = Column(String, nullable=False, default="beds2bytes")
+    passphrase = Column(String(255), nullable=False, default="beds2bytes")
     state = Column(Boolean, nullable=False, default=True)
 
     user = relationship("UserItem", back_populates="simulations")

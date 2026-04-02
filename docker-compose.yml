@@ -7,8 +7,16 @@ services:
     volumes:
       # Mount the local app directory to the /code/app directory in the container    
       - ./app:/code/app
+      - /etc/letsencrypt/archive/${HOST_NAME}:/certs:ro
     ports:
+      - "443:443"
       - "8080:8080"
     environment:
       - PYTHONUNBUFFERED=1
       - MODE
+    env_file:
+      - .env
+    networks:
+      - dev-network
+networks:
+  dev-network:

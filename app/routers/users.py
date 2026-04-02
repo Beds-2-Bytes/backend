@@ -2,12 +2,12 @@ from fastapi import FastAPI, HTTPException, Depends, APIRouter, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, Field
 from sqlalchemy.orm import Session
-from database.database import SessionLocal
-from database.users_database import UserItem
-from security.verify import verify_jwt_token  # Import the verify_jwt_token function
-from security.create_token import create_access_token
+from ..database.database import SessionLocal
+from ..database.users_database import UserItem
+from ..security.verify import verify_jwt_token  # Import the verify_jwt_token function
+from ..security.create_token import create_access_token
 from passlib.context import CryptContext
-from constants import RoleEnum
+from ..constants import RoleEnum
 from typing import Optional
 
 # Split the endpoints into public and private, eg you have to be able to login and register without authorization

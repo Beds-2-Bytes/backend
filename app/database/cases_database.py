@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Text, Boolean
+from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Text, Boolean, JSON
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.ext.mutable import MutableDict
 from sqlalchemy.orm import sessionmaker, relationship
@@ -11,10 +11,10 @@ class CaseItem(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
-    case_name = Column(String, nullable=False)
-    patient_name = Column(String, nullable=False)
-    patient_id = Column(String, nullable=False)
-    base_values = Column(MutableDict.as_mutable(JSONB), nullable=False, default=dict)
+    case_name = Column(String(255), nullable=False)
+    patient_name = Column(String(255), nullable=False)
+    patient_id = Column(String(255), nullable=False)
+    base_values = Column(MutableDict.as_mutable(JSON), nullable=False, default=dict)
     # Medical Diagnosis
     base_problem = Column(Text, nullable=False)
     learning_goals = Column(Text, nullable=False)
@@ -26,4 +26,4 @@ class CaseItem(Base):
     lab_samples = Column(Text, nullable=False)
 
     simulations = relationship("SimulationItem", back_populates="case")
-    user = relationship('UserItem', back_populates="cases")
+    user = relationship('UserItem', back_populates="cases") 

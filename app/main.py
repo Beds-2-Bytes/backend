@@ -3,23 +3,27 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 #from app.database import SessionLocal, CartItem
-from security.verify import verify_jwt_token
-from routers import simulation, users, cases, files
-from routers.files import router as file_router
-from database.database import Base, engine
-from database.users_database import UserItem
-from database.simulation_database import SimulationItem
-from database.cases_database import CaseItem
-from database.files_database import FileItem
-from websocket.websocket import router as websocket_router
+from .security.verify import verify_jwt_token
+from .routers import simulation, users, cases, files
+from .routers.files import router as file_router
+from .database.database import Base, engine
+from .database.users_database import UserItem
+from .database.simulation_database import SimulationItem
+from .database.cases_database import CaseItem
+from .database.files_database import FileItem
+from .websocket.websocket import router as websocket_router
 from pathlib import Path
-from config import UPLOAD_DIR
+from .config import UPLOAD_DIR
+import ssl
 
 # Create DB tables and such for sqlalchemy
 Base.metadata.create_all(bind=engine)
 
 # Main App instance
 app = FastAPI()
+
+#ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+#ssl_context.load_cert_chain('/code/app/cert.pem', keyfile='/code/app/key.pem')
 
 # CORS, Allow all requests, types and headers
 app.add_middleware(

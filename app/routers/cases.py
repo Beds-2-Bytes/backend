@@ -1,10 +1,10 @@
 from fastapi import FastAPI, HTTPException, Depends, APIRouter, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
-from database.database import SessionLocal
-from database.cases_database import CaseItem
-from security.verify import verify_jwt_token  # Import the verify_jwt_token function
-from security.create_token import create_access_token
+from ..database.database import SessionLocal
+from ..database.cases_database import CaseItem
+from ..security.verify import verify_jwt_token  # Import the verify_jwt_token function
+from ..security.create_token import create_access_token
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, Dict, Any
 

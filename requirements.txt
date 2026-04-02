@@ -26,3 +26,7 @@ python-jose
 
 # Password hashing
 passlib[argon2]
+
+pymysql
+
+mysqlclient
